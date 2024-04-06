@@ -16,7 +16,7 @@ public class Earth extends Planet
     public Earth()
     {
         super(12.75566E6,150,29.77286,1,
-                5.976E24,1,5.52,1,15,1, 365.25, 23.5, 1);
+                5.976E24,1,5.52,15,1, 365.25, 23.5, 1);
     }
 
     public String toString()

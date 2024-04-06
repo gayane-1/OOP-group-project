@@ -7,22 +7,20 @@ public class Main
     {
         Planet e = new Earth();
         Planet m = new Mercury();
+        Planet v = new Venus();
 
         double mass = 175 / e.surfaceGravity();
 
 
         System.out.println(e.surfaceWeight(mass));
         System.out.println(m.surfaceWeight(mass));
+        System.out.println(v.surfaceWeight(mass));
 
+        v.displayStats();
+        System.out.println();
         e.displayStats();
-        try
-        {
-            m.compareDistanceFromSun(e);
-            System.out.println(e.massRatio(m));
-        }
-        catch (InvalidTargetObjectTypeException exception)
-        {
-            System.out.println("null");
-        }
+
+
+
     }
 }

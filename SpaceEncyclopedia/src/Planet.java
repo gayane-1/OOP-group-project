@@ -14,7 +14,6 @@ public abstract class Planet implements PlanetInterface
     private double mass;
     private double volume;
     private double averageDensity;
-    private double surfaceGravity;
     private double averageSurfaceTemperature;
     private double numberOfMoons;
 
@@ -22,12 +21,12 @@ public abstract class Planet implements PlanetInterface
     {
         EARTH,
         MERCURY,
+        VENUS,
 
     }
 
     public Planet(double diameter, double averageDistanceFromSun, double orbitalSpeedAroundSun, double sunRiseTosunRise,
-                  double mass, double volume,
-                  double averageDensity, double surfaceGravity, double averageSurfaceTemperature,
+                  double mass, double volume, double averageDensity, double averageSurfaceTemperature,
                   double numberOfMoons, double orbitsSun, double axisTilt, double spinsOnItsAxes)
     {
         this.diameter = diameter;
@@ -37,7 +36,6 @@ public abstract class Planet implements PlanetInterface
         this.mass = mass;
         this.volume = volume;
         this.averageDensity = averageDensity;
-        this.surfaceGravity = surfaceGravity;
         this.averageSurfaceTemperature = averageSurfaceTemperature;
         this.numberOfMoons = numberOfMoons;
         this.axisTilt = axisTilt;
@@ -94,10 +92,6 @@ public abstract class Planet implements PlanetInterface
     {
         return numberOfMoons;
     }
-    public double getSurfaceGravity()
-    {
-        return surfaceGravity;
-    }
 
     public double getVolume()
     {
@@ -116,11 +110,11 @@ public abstract class Planet implements PlanetInterface
         System.out.println("Mass: " + getMass() + " kg");
         System.out.println("Volume: " + getVolume() + " Earth");
         System.out.println("Average Density: " + getAverageDensity() + "x1000 kg/m3");
-        System.out.println("Surface Gravity: " + getSurfaceGravity() + "x1000 N/kg");
+        System.out.println("Surface Gravity: " + surfaceGravity() + " N/kg");
         System.out.println("Average Surface Temperature: " + getAverageSurfaceTemperature() + " C");
         System.out.println("Number Of Moons: " + getNumberOfMoons());
-        System.out.println("Orbits Sun in : " + getOrbitsSun());
-        System.out.println("Spins On Its Axis : " + getSpinsOnItsAxes());
+        System.out.println("Orbits Sun in : " + getOrbitsSun() + " days");
+        System.out.println("Spins On Its Axis : " + getSpinsOnItsAxes() + " days");
         System.out.println("Vertical Axis Tilt : " + getAxisTilt() + " degrees");
 
     }
