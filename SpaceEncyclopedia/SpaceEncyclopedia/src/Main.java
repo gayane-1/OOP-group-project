@@ -18,6 +18,7 @@ public class Main
         try
         {
             m.compareDistanceFromSun(e);
+            System.out.println(m.massRatio(e));
         }
         catch (InvalidTargetObjectTypeException exception)
         {
