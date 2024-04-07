@@ -1,6 +1,6 @@
 import javax.management.modelmbean.InvalidTargetObjectTypeException;
 
-public interface PlanetInterface
+public interface IPlanet
 {
     void displayStats();
     double surfaceGravity();

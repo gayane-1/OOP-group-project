@@ -1,5 +1,5 @@
 import javax.management.modelmbean.InvalidTargetObjectTypeException;
-public abstract class Planet implements PlanetInterface
+public abstract class Planet implements IPlanet
 {
     public static final double G = 6.67300E-11;
     private double orbitsSun;
