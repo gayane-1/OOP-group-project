@@ -25,7 +25,9 @@ public class Earth extends Planet
     public Earth()
     {
         super(12.75566E6,150,29.77286,1,
-                5.976E24,1,5.52,15,1, 365.25, 23.5, 1);
+                5.976E24,1,5.52,15,1, 365.25,
+                23.5, 1, 1.00004, 99.403308, 102.768413,
+                0.016713, 1.0, 0,0,0);
     }
 
     /**
@@ -44,12 +46,12 @@ public class Earth extends Planet
      * Calculates the day of a given date in a year.
      * @param date <code>CivilDate</code> date.
      */
-    public static void civilDateToDayNumber(CivilDate date)
+    public static int civilDateToDayNumber(CivilDate date)
     {
         PADateTime paDateTime = new PADateTime();
         int dayNumber = paDateTime.civilDateToDayNumber(date.month, date.day, date.year);
 
-        System.out.println(dayNumber);
+        return dayNumber;
     }
 
     /**
@@ -117,7 +119,10 @@ public class Earth extends Planet
         System.out.println("Civil time month: " + civilDateTime.month);
         System.out.println("Civil time day: " + civilDateTime.day);
     }
-
+    public static void universalTimeToGreenwichSiderealTime()
+    {
+        
+    }
     public String toString()
     {
         return PlanetName.EARTH.toString();

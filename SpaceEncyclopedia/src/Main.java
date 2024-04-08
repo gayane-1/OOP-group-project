@@ -1,4 +1,3 @@
-import javax.management.modelmbean.InvalidTargetObjectTypeException;
 import astro.practical.containers.CivilDate;
 import astro.practical.containers.CivilDateTime;
 import astro.practical.containers.CivilTime;
@@ -7,9 +6,6 @@ import astro.practical.containers.LocalSiderealTime;
 import astro.practical.containers.UniversalDateTime;
 import astro.practical.containers.UniversalTime;
 import astro.practical.lib.PADateTime;
-import astro.practical.lib.PAUtil;
-import astro.practical.test.TestLib;
-import astro.practical.types.PAWarningFlag;
 public class Main
 {
 
@@ -18,6 +14,11 @@ public class Main
         Planet e = new Earth();
         Planet m = new Mercury();
         Planet v = new Venus();
+        Planet j = new Jupiter();
+        Planet u = new Uranus();
+        Planet n = new Neptune();
+        Planet s = new Saturn();
+        Planet mars = new Mars();
 
         double mass = 175 / e.surfaceGravity();
 
@@ -39,5 +40,12 @@ public class Main
         System.out.println();
         Earth.universalTimeToCivilTime(new UniversalDateTime(4,37,12,4,9,2003),
                 4,false);
+        System.out.println();
+        System.out.println();
+
+        Planet.calculateCoordinatesOfPlanet(new CivilDate(5,31,2024), m);
+        Planet.calculateCoordinatesOfPlanet(new CivilDate(10,12,2001), j);
+        Planet.calculateCoordinatesOfPlanet(new CivilDate(4,20,1890), n);
+
     }
 }
