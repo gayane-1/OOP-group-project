@@ -1,42 +1,70 @@
 import astro.practical.containers.CivilDate;
 
-public abstract class Planet implements IPlanet
+public enum Planet
 {
+        EARTH(12.75566E6,150,29.77286,1,
+                5.976E24,1,5.52,15,1, 365.25,
+                23.5, 1, 1.00004, 99.403308, 102.768413,
+                0.016713, 1.0, 0,0,0),
+        MERCURY(4.879531E6, 57.9364, 47.877984, 176, 3.303E23, 0.06,
+                5.43, 167, 0, 87.97, 0,
+                58.65, 0.240852, 60.750646,
+                77.299833,0.205633, 0.387099,
+                7.004540, 48.212740, 6.74),
+        VENUS(12.10388E6, 108.1479, 35, 117, 4.869E24, 0.86,
+                5.2, 464, 0, 224.7, 2.7,
+                243, 0.615211, 88.455855,
+                131.430236, 0.006778,
+                0.723332, 3.394535, 76.589820, 16.92),
+        MARS(6.794650E6, 228.527, 24.1402, 1.02625,
+                6.421E23, 0.15, 3.93, -63, 2,
+                687,25.2, 1.02625, 1.880932, 240.739474,
+                335.874939, 0.093396,
+                1.523688, 1.849736, 49.480308, 9.36),
+        JUPITER(142.984E6, 1.427E6, 9.65606, 0.42625,
+                5.688E26, 763.59, 0.69, -140, 60,
+                10752.9,26.7, 0.44416667, 29.471362, 287.690033,
+                92.861407, 0.055581,
+                9.554747, 2.488980, 113.576139, 165.60),
+        SATURN(120.535E6, 778.922, 12.8748, 0.41,
+                1.9E27, 1.321, 1.33, -110, 62,
+                4332.55,3.1, 0.41375, 11.863075, 90.638185,
+                14.170747, 0.048482,
+                5.202561, 1.303613, 100.353142, 196.74),
+        URANUS(51.117593E6, 2867.851, 6.839712, 0.7183,
+                8.686E25, 63.1, 1.32, -197, 27,
+                30660,98, 0.7183, 84.039492, 271.063148,
+                172.884833, 0.046321,
+                19.21814, 0.773059, 73.926961, 65.80),
+        NEPTUNE(49.532390E6, 4506.163, 5.47177, 0.67125,
+                1.024E26, 57.74, 1.64, -200, 13,
+                60152,28.3, 0.67125, 164.79246, 282.349556,
+                48.009758, 0.009003,
+                30.109570, 1.770646, 131.670599, 62.2);
+
     public static final double G = 6.67300E-11;
-    private double orbitsSun;
-    private double spinsOnItsAxes;
-    private double axisTilt;
-    private double diameter;
-    private double averageDistanceFromSun;
-    private double orbitalSpeedAroundSun;
-    private double sunRiseTosunRise;
-    private double mass;
-    private double volume;
-    private double averageDensity;
-    private double averageSurfaceTemperature;
-    private double numberOfMoons;
-    private double period;
-    private double longitudeDegrees;
-    private double longitudePerihelionDegrees;
-    private double eccentricityOfTheOrbit;
-    private double semiMajorAxisOfTheOrbit;
-    private double inclinationOfTheOrbit;
-    private double longitudeOfTheAscendingNode;
-    private double angularDiameterAtOneAU;
-    protected enum PlanetName
-    {
-        EARTH,
-        MERCURY,
-        VENUS,
-        MARS,
-        JUPITER,
-        SATURN,
-        URANUS,
-        NEPTUNE
+    private final double orbitsSun;
+    private final double spinsOnItsAxes;
+    private final double axisTilt;
+    private final double diameter;
+    private final double averageDistanceFromSun;
+    private final double orbitalSpeedAroundSun;
+    private final double sunRiseTosunRise;
+    private final double mass;
+    private final double volume;
+    private final double averageDensity;
+    private final double averageSurfaceTemperature;
+    private final double numberOfMoons;
+    private final double period;
+    private final double longitudeDegrees;
+    private final double longitudePerihelionDegrees;
+    private final double eccentricityOfTheOrbit;
+    private final double semiMajorAxisOfTheOrbit;
+    private final double inclinationOfTheOrbit;
+    private final double longitudeOfTheAscendingNode;
+    private final double angularDiameterAtOneAU;
 
-    }
-
-    public Planet(double diameter, double averageDistanceFromSun, double orbitalSpeedAroundSun, double sunRiseTosunRise,
+     Planet(double diameter, double averageDistanceFromSun, double orbitalSpeedAroundSun, double sunRiseTosunRise,
                   double mass, double volume, double averageDensity, double averageSurfaceTemperature,
                   double numberOfMoons, double orbitsSun, double axisTilt, double spinsOnItsAxes,
                   double period, double longitudeDegrees, double longitudePerihelionDegrees, double eccentricityOfTheOrbit,
@@ -176,19 +204,15 @@ public abstract class Planet implements IPlanet
 
     }
 
-    public void compareDistanceFromSun(Object planet) throws IllegalArgumentException
+    public void compareDistanceFromSun(Planet planet)
     {
         if(planet == null)
             throw new NullPointerException();
 
-        if(!(planet instanceof Planet))
-            throw new IllegalArgumentException();
-
-        Planet p = (Planet)planet;
-        if(getAverageDistanceFromSun() > p.getAverageDistanceFromSun())
+        if(getAverageDistanceFromSun() > planet.getAverageDistanceFromSun())
             System.out.println(toString() + " is more farther from Sun");
         else
-            System.out.println(p.toString() + " is more farther from Sun");
+            System.out.println(planet.toString() + " is more farther from Sun");
 
     }
 
@@ -201,37 +225,27 @@ public abstract class Planet implements IPlanet
     {
         return otherWeight * surfaceGravity();
     }
-    public double massRatio(Object planet) throws IllegalArgumentException, NullPointerException
+    public double massRatio(Planet planet)
     {
         if(planet == null)
             throw new NullPointerException();
 
-        if(!(planet instanceof Planet))
-            throw new IllegalArgumentException();
-
-        Planet p = (Planet)planet;
-        return getMass() / p.getMass();
+        return getMass() / planet.getMass();
     }
 
-    private static int calculateDaysFromNow(CivilDate date)
+    private int calculateDaysFromNow(CivilDate date)
     {
-        int day =  Earth.civilDateToDayNumber(date);
+        int day =  Converter.civilDateToDayNumber(date);
         CivilDate currentDate = new CivilDate(1,1,2024);
         int daysFromCurrentYear = currentDate.year;
 
         return day - (daysFromCurrentYear - date.year) * 365;
     }
-    private static double meanAnomaly(CivilDate date, Object planet) throws IllegalArgumentException, NullPointerException
+    private double meanAnomaly(CivilDate date)
     {
-        if(planet == null)
-            throw new NullPointerException();
-        if(!(planet instanceof Planet))
-            throw new IllegalArgumentException();
-
-        Planet p = (Planet) planet;
         int days = calculateDaysFromNow(date);
-        double meanAnomaly = (360 / 365.242191) * (days / p.getPeriod()) + p.getLongitudeDegrees() -
-            p.getLongitudePerihelionDegrees();
+        double meanAnomaly = (360 / 365.242191) * (days / getPeriod()) + getLongitudeDegrees() -
+            getLongitudePerihelionDegrees();
 
         while (Math.abs(meanAnomaly) >= 360)
         {
@@ -243,17 +257,12 @@ public abstract class Planet implements IPlanet
         return meanAnomaly;
 
     }
-    private static double heliocentricLongitude(CivilDate date, Object planet) throws IllegalArgumentException, NullPointerException
+    private double heliocentricLongitude(CivilDate date)
     {
-        if(planet == null)
-            throw new NullPointerException();
-        if(!(planet instanceof Planet))
-            throw new IllegalArgumentException();
 
-        Planet p = (Planet) planet;
-        double meanAnomaly = meanAnomaly(date, p);
+        double meanAnomaly = meanAnomaly(date);
 
-        double longitude = meanAnomaly + p.getLongitudePerihelionDegrees() + (360 / Math.PI) * p.getEccentricityOfTheOrbit()
+        double longitude = meanAnomaly + getLongitudePerihelionDegrees() + (360 / Math.PI) * getEccentricityOfTheOrbit()
                                                                 * Math.sin(meanAnomaly);
 
         while (Math.abs(longitude) >= 360)
@@ -265,33 +274,23 @@ public abstract class Planet implements IPlanet
         }
         return longitude;
     }
-    private static double ratioToEarthsOrbit(CivilDate date, Object planet) throws IllegalArgumentException, NullPointerException
+    private double ratioToEarthsOrbit(CivilDate date)
     {
-        if(planet == null)
-            throw new NullPointerException();
-        if(!(planet instanceof Planet))
-            throw new IllegalArgumentException();
 
-        Planet p = (Planet) planet;
-        double ratio = p.getSemiMajorAxisOfTheOrbit() * (1 - p.getEccentricityOfTheOrbit() * p.getEccentricityOfTheOrbit()) /
-                                    (1 + p.getEccentricityOfTheOrbit() * Math.cos(heliocentricLongitude(date,p) - p.getLongitudePerihelionDegrees()));
+        double ratio = getSemiMajorAxisOfTheOrbit() * (1 - getEccentricityOfTheOrbit() * getEccentricityOfTheOrbit()) /
+                                    (1 + getEccentricityOfTheOrbit() * Math.cos(heliocentricLongitude(date) - getLongitudePerihelionDegrees()));
 
         return ratio;
 
     }
-    public static void calculateCoordinatesOfPlanet(CivilDate date, Object planet) throws IllegalArgumentException, NullPointerException
+    public void calculateCoordinatesOfPlanet(CivilDate date)
     {
-        if(planet == null)
-            throw new NullPointerException();
-        if(!(planet instanceof Planet))
-            throw new IllegalArgumentException();
 
-        Planet p = (Planet) planet;
-        double l = p.heliocentricLongitude(date, p);
-        double heliocentricLatitude = Math.asin(Math.sin(l - p.getLongitudeOfTheAscendingNode()) * Math.sin(p.getInclinationOfTheOrbit()));
+        double l = heliocentricLongitude(date);
+        double heliocentricLatitude = Math.asin(Math.sin(l - getLongitudeOfTheAscendingNode()) * Math.sin(getInclinationOfTheOrbit()));
 
-        double y = Math.sin(l - p.getLongitudeOfTheAscendingNode()) * Math.cos(p.getInclinationOfTheOrbit());
-        double x = Math.cos(l - p.getLongitudeOfTheAscendingNode());
+        double y = Math.sin(l - getLongitudeOfTheAscendingNode()) * Math.cos(getInclinationOfTheOrbit());
+        double x = Math.cos(l - getLongitudeOfTheAscendingNode());
 
         double angle = Math.atan(y / x);
 
@@ -309,14 +308,14 @@ public abstract class Planet implements IPlanet
             angle -= 90;
             angle = Math.abs(angle);
         }
-        double longitudeNew = angle + p.getLongitudeOfTheAscendingNode();
-        double ratioNew = ratioToEarthsOrbit(date,p) * Math.cos(heliocentricLatitude);
+        double longitudeNew = angle + getLongitudeOfTheAscendingNode();
+        double ratioNew = ratioToEarthsOrbit(date) * Math.cos(heliocentricLatitude);
 
-        double a = Math.atan((ratioNew * Math.sin(heliocentricLongitude(date, new Earth()) - longitudeNew))
-                                        / ratioToEarthsOrbit(date, new Earth()) -
-                ratioNew * Math.cos(heliocentricLongitude(date, new Earth()) - - longitudeNew));
+        double a = Math.atan((ratioNew * Math.sin(EARTH.heliocentricLongitude(date) - longitudeNew))
+                                        / EARTH.ratioToEarthsOrbit(date) -
+                ratioNew * Math.cos(heliocentricLongitude(date) - - longitudeNew));
 
-        double geocentricLongitude = 180 + heliocentricLongitude(date, new Earth()) + a;
+        double geocentricLongitude = 180 + heliocentricLongitude(date) + a;
         while (Math.abs(geocentricLongitude) >= 360)
         {
             if(geocentricLongitude < 0)
@@ -325,11 +324,10 @@ public abstract class Planet implements IPlanet
                 geocentricLongitude -= 360;
         }
         double geocentricLatitude = Math.atan(ratioNew * Math.tan(heliocentricLatitude) *
-                Math.sin(geocentricLongitude - longitudeNew) / ratioToEarthsOrbit(date, new Earth()) *
-                Math.sin(longitudeNew - heliocentricLongitude(date, new Earth())));
+                Math.sin(geocentricLongitude - longitudeNew) / EARTH.ratioToEarthsOrbit(date) *
+                Math.sin(longitudeNew - EARTH.heliocentricLongitude(date)));
 
         System.out.println("Geocentric Longitude in Degrees alfa: " + geocentricLongitude);
         System.out.println("Geocentric Latitude in Degrees betta: " + geocentricLatitude);
     }
 }
-
