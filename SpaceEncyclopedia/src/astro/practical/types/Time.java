@@ -13,4 +13,9 @@ public class Time {
 		this.minutes = minutes;
 		this.seconds = seconds;
 	}
+
+	public String toString()
+	{
+		return hours + "h " + minutes + "m " + seconds + "s";
+	}
 }

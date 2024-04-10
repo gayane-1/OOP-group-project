@@ -1,7 +1,4 @@
-import astro.practical.containers.CivilDate;
-import astro.practical.containers.CivilDateTime;
-import astro.practical.containers.CivilTime;
-import astro.practical.containers.UniversalDateTime;
+import astro.practical.containers.*;
 import astro.practical.lib.PADateTime;
 
 public class Converter
@@ -53,7 +50,7 @@ public class Converter
         PADateTime paDateTime = new PADateTime();
         CivilTime civilTime = paDateTime.decimalHoursToCivilTime(decimalHours);
 
-        System.out.println(civilTime.hours + " " + civilTime.minutes + " " + civilTime.seconds);
+        System.out.println(civilTime.toString());
     }
 
     /**
@@ -68,12 +65,7 @@ public class Converter
         UniversalDateTime universalDateTime = paDateTime.localCivilTimeToUniversalTime(dateTime.hours, dateTime.minutes,
                 dateTime.seconds, isDaylightSavings, zoneCorrection, dateTime.day, dateTime.month, dateTime.year);
 
-        System.out.println("Universal hours: " + universalDateTime.hours);
-        System.out.println("Universal minutes: " + universalDateTime.minutes);
-        System.out.println("Universal seconds: " + universalDateTime.seconds);
-        System.out.println("Universal year: " + universalDateTime.year);
-        System.out.println("Universal month: " + universalDateTime.month);
-        System.out.println("Universal day: " + universalDateTime.day);
+        System.out.println(universalDateTime.toString());
     }
     /**
      * Converts universal time to civil time.
@@ -88,17 +80,36 @@ public class Converter
         CivilDateTime civilDateTime = paDateTime.universalTimeToLocalCivilTime(dateTime.hours,dateTime.minutes,
                 dateTime.seconds,isDaylightSavings,zoneCorrection, dateTime.day, dateTime.month, dateTime.year);
 
-        System.out.println("Civil time hours: " + civilDateTime.hours);
-        System.out.println("Civil time minutes: " + civilDateTime.minutes);
-        System.out.println("Civil time seconds: " + civilDateTime.seconds);
-        System.out.println("Civil time year: " + civilDateTime.year);
-        System.out.println("Civil time month: " + civilDateTime.month);
-        System.out.println("Civil time day: " + civilDateTime.day);
+        System.out.println(civilDateTime.toString());
     }
-    /*
-    public static void universalTimeToGreenwichSiderealTime()
+    public static void universalTimeToGreenwichSiderealTime(UniversalDateTime dateTime)
     {
+        PADateTime paDateTime = new PADateTime();
+        GreenwichSiderealTime gst = paDateTime.universalTimeToGreenwichSiderealTime(dateTime.hours, dateTime.minutes,
+                                                                dateTime.seconds, dateTime.day, dateTime.month, dateTime.year);
 
-    } */
+        System.out.println(gst.toString());
+    }
+    public static void greenwichSiderealTimeToUniversalTime(GreenwichSiderealTime dateTime, CivilDate date)
+    {
+        PADateTime paDateTime = new PADateTime();
+        UniversalTime udt = paDateTime.greenwichSiderealTimeToUniversalTime(dateTime.hours, dateTime.minutes,
+                dateTime.seconds, date.day, date.month, date.year);
 
+        System.out.println(udt.toString());
+    }
+    public static void greenwichSiderealTimeToLocalSiderealTime(GreenwichSiderealTime dateTime, double longitude)
+    {
+        PADateTime paDateTime = new PADateTime();
+        LocalSiderealTime lst = paDateTime.greenwichSiderealTimeToLocalSiderealTime(dateTime.hours, dateTime.minutes, dateTime.seconds, longitude);
+
+        System.out.println(lst.toString());
+    }
+    public static void localSiderealTimeToGreenwichSiderealTime(LocalSiderealTime dateTime, double longitude)
+    {
+        PADateTime paDateTime = new PADateTime();
+        GreenwichSiderealTime gst = paDateTime.localSiderealTimeToGreenwichSiderealTime(dateTime.hours, dateTime.minutes, dateTime.seconds, longitude);
+
+        System.out.println(gst.toString());
+    }
 }

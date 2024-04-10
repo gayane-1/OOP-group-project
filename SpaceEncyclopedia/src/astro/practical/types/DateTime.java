@@ -19,4 +19,9 @@ public class DateTime {
 		this.month = month;
 		this.year = year;
 	}
+
+	public String toString()
+	{
+		return hours + "h " + minutes + "m " + seconds + "s " + '\n' + day + "/" + month + "/" + year;
+	}
 }
