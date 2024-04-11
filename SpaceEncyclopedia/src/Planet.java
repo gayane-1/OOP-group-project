@@ -231,7 +231,7 @@ public enum Planet
         return getMass() / planet.getMass();
     }
 
-    private int calculateDaysFromNow(CivilDate date)
+    public int calculateDaysFromNow(CivilDate date)
     {
         int day =  Converter.civilDateToDayNumber(date.getMonth(), date.getDay(), date.getYear());
         CivilDate currentDate = new CivilDate(1,1,2024);
@@ -239,7 +239,7 @@ public enum Planet
 
         return day - (daysFromCurrentYear - date.getYear()) * 365;
     }
-    private double meanAnomaly(CivilDate date)
+    public double meanAnomaly(CivilDate date)
     {
         int days = calculateDaysFromNow(date);
         double meanAnomaly = (360 / 365.242191) * (days / getPeriod()) + getLongitudeDegrees() -
@@ -255,7 +255,7 @@ public enum Planet
         return meanAnomaly;
 
     }
-    private double heliocentricLongitude(CivilDate date)
+    public double heliocentricLongitude(CivilDate date)
     {
 
         double meanAnomaly = meanAnomaly(date);
@@ -272,7 +272,7 @@ public enum Planet
         }
         return longitude;
     }
-    private double ratioToEarthsOrbit(CivilDate date)
+    public double ratioToEarthsOrbit(CivilDate date)
     {
 
         double ratio = getSemiMajorAxisOfTheOrbit() * (1 - getEccentricityOfTheOrbit() * getEccentricityOfTheOrbit()) /
