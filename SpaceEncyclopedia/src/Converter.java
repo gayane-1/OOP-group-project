@@ -1,115 +1,386 @@
-import astro.practical.containers.*;
-import astro.practical.lib.PADateTime;
-
 public class Converter
 {
     /**
-     * Calculates the date of Easter in a given year.
-     * @param year <code>int</code> year of Easter.
+     * Convert an Angle (degrees, minutes, and seconds) to Decimal Degrees
      */
-    public static void dateOfEaster(int year)
+    public static double angleToDecimalDegrees(double degrees, double minutes, double seconds)
     {
-        PADateTime paDateTime = new PADateTime();
-        CivilDate date = paDateTime.getDateOfEaster(year);
+        var a = Math.abs(seconds) / 60;
+        var b = (Math.abs(minutes) + a) / 60;
+        var c = Math.abs(degrees) + b;
+        var d = (degrees < 0 || minutes < 0 || seconds < 0) ? -c : c;
 
-        System.out.println("The date of Easter in " + year + " is " + date.day + "/" + date.month + "/" + date.year);
+        return d;
+    }
+    public static Angle decimalDegreesToAngle(double decimalDegrees)
+    {
+        double unsignedDecimal = Math.abs(decimalDegrees);
+        double totalSeconds = unsignedDecimal * 3600;
+        double seconds2DP = Math.ceil(totalSeconds % 60);
+        double correctedSeconds = (seconds2DP == 60) ? 0 : seconds2DP;
+        double correctedRemainder = (seconds2DP == 60) ? totalSeconds + 60 : totalSeconds;
+        double minutes = Math.floor(correctedRemainder / 60) % 60;
+        double unsignedDegrees = Math.floor(correctedRemainder / 3600);
+        double signedDegrees = (decimalDegrees < 0) ? -1 * unsignedDegrees : unsignedDegrees;
+
+        return new Angle(signedDegrees, minutes, Math.floor(correctedSeconds));
+    }
+    /**
+     * Return the hour part of a Decimal Hours
+     */
+    public static int decimalHoursHour(double decimalHours)
+    {
+        double a = Math.abs(decimalHours);
+        double b = a * 3600;
+        double c = Math.ceil(b - 60 * Math.floor(b / 60));
+        double e = (c == 60) ? b + 60 : b;
+
+        return (decimalHours < 0) ? (int) -(Math.floor(e / 3600)) : (int) Math.floor(e / 3600);
+    }
+    /**
+     * Return the minutes part of a Decimal Hours
+     */
+    public static int decimalHoursMinute(double decimalHours)
+    {
+        double a = Math.abs(decimalHours);
+        double b = a * 3600;
+        double c = Math.ceil(b - 60 * Math.floor(b / 60));
+        double e = (c == 60) ? b + 60 : b;
+
+        return (int) Math.floor(e / 60) % 60;
+    }
+    /**
+     * Return the seconds part of a Decimal Hours
+     */
+    public static double decimalHoursSecond(double decimalHours)
+    {
+        double a = Math.abs(decimalHours);
+        double b = a * 3600;
+        double c = Math.ceil(b - 60 * Math.floor(b / 60));
+        double d = (c == 60) ? 0 : c;
+
+        return d;
+    }
+    /**
+     * Gets the date of Easter for the year specified.
+     */
+    public static CivilDate getDateOfEaster(int inputYear)
+    {
+        double year = inputYear;
+
+        double a = year % 19;
+        double b = Math.floor(year / 100);
+        double c = year % 100;
+        double d = Math.floor(b / 4);
+        double e = b % 4;
+        double f = Math.floor((b + 8) / 25);
+        double g = Math.floor((b - f + 1) / 3);
+        double h = ((19 * a) + b - d - g + 15) % 30;
+        double i = Math.floor(c / 4);
+        double k = c % 4;
+        double l = (32 + 2 * (e + i) - h - k) % 7;
+        double m = Math.floor((a + (11 * h) + (22 * l)) / 451);
+        double n = Math.floor((h + l - (7 * m) + 114) / 31);
+        double p = (h + l - (7 * m) + 114) % 31;
+
+        int day = (int)(p + 1);
+        double month = n;
+
+        return new CivilDate( day, (int)month, (int) year);
+    }
+    /**
+     * Calculate day number for a date.
+     */
+    public static int civilDateToDayNumber(int month, int day, int year)
+    {
+        if (month <= 2) {
+            month = month - 1;
+            month = isLeapYear(year) ? month * 62 : month * 63;
+            month = (int) Math.floor((double) month / 2);
+        } else {
+            month = (int) Math.floor(((double) month + 1) * 30.6);
+            month = (isLeapYear(year)) ? month - 62 : month - 63;
+        }
+
+        return month + day;
+    }
+    /**
+     * Determine if year is a leap year.
+     */
+    public static boolean isLeapYear(int inputYear)
+    {
+        double year = inputYear;
+
+        if (year % 4 == 0) {
+            if (year % 100 == 0)
+                return (year % 400 == 0);
+            else
+                return true;
+        } else
+            return false;
     }
 
     /**
-     * Calculates the day of a given date in a year.
-     * @param date <code>CivilDate</code> date.
+     * Convert Civil Time (hours,minutes,seconds) to Decimal Hours
      */
-    public static int civilDateToDayNumber(CivilDate date)
+    public static double civilTimeToDecimalHours(double hours, double minutes, double seconds)
     {
-        PADateTime paDateTime = new PADateTime();
-        int dayNumber = paDateTime.civilDateToDayNumber(date.month, date.day, date.year);
+        double fHours = hours;
+        double fMinutes = minutes;
+        double fSeconds = seconds;
 
-        return dayNumber;
+        double a = Math.abs(fSeconds) / 60;
+        double b = (Math.abs(fMinutes) + a) / 60;
+        double c = Math.abs(fHours) + b;
+
+        return (fHours < 0 || fMinutes < 0 || fSeconds < 0) ? -c : c;
+    }
+    /**
+     * Convert Decimal Hours to Civil Time (hours,minutes,seconds)
+     */
+    public static Time decimalHoursToCivilTime(double decimalHours)
+    {
+        double hours = decimalHoursHour(decimalHours);
+        double minutes = decimalHoursMinute(decimalHours);
+        double seconds = decimalHoursSecond(decimalHours);
+
+        return new Time(hours, minutes, seconds);
     }
 
     /**
-     * Calculates civil time from decimal hours
-     * @param hours <code>double</code> hours.
-     * @param minutes <code>double</code> minutes.
-     * @param seconds <code>double</code> seconds.
+     * Convert a Greenwich Date/Civil Date (day,month,year) to Julian Date
      */
-    public static void civilTimeToDecimalHours(double hours, double minutes, double seconds)
+    public static double civilDateToJulianDate(double day, double month, double year)
     {
-        PADateTime paDateTime = new PADateTime();
-        double decimalHours = paDateTime.civilTimeToDecimalHours(hours, minutes, seconds);
+        double fDay = (double) day;
+        double fMonth = (double) month;
+        double fYear = (double) year;
 
-        System.out.println(decimalHours);
+        double y = (fMonth < 3) ? fYear - 1 : fYear;
+        double m = (fMonth < 3) ? fMonth + 12 : fMonth;
+
+        double b;
+
+        if (fYear > 1582) {
+            double a = Math.floor(y / 100);
+            b = 2 - a + Math.floor(a / 4);
+        } else {
+            if (fYear == 1582 && fMonth > 10) {
+                double a = Math.floor(y / 100);
+                b = 2 - a + Math.floor(a / 4);
+            } else {
+                if (fYear == 1582 && fMonth == 10 && fDay >= 15) {
+                    double a = Math.floor(y / 100);
+                    b = 2 - a + Math.floor(a / 4);
+                } else
+                    b = 0;
+            }
+        }
+
+        double c = (y < 0) ? Math.floor(((365.25 * y) - 0.75)) : Math.floor(365.25 * y);
+        double d = Math.floor(30.6001 * (m + 1.0));
+
+        return b + c + d + fDay + 1720994.5;
+    }
+    /**
+     * Returns the day part of a Julian Date
+     */
+    public static double julianDateDay(double julianDate)
+    {
+        double i = Math.floor(julianDate + 0.5);
+        double f = julianDate + 0.5 - i;
+        double a = Math.floor((i - 1867216.25) / 36524.25);
+        double b = (i > 2299160) ? i + 1 + a - Math.floor(a / 4) : i;
+        double c = b + 1524;
+        double d = Math.floor((c - 122.1) / 365.25);
+        double e = Math.floor(365.25 * d);
+        double g = Math.floor((c - e) / 30.6001);
+
+        return c - e + f - Math.floor(30.6001 * g);
+    }
+    /**
+     * Returns the month part of a Julian Date
+     */
+    public static int julianDateMonth(double julianDate)
+    {
+        double i = Math.floor(julianDate + 0.5);
+        double a = Math.floor((i - 1867216.25) / 36524.25);
+        double b = (i > 2299160) ? i + 1 + a - Math.floor(a / 4) : i;
+        double c = b + 1524;
+        double d = Math.floor((c - 122.1) / 365.25);
+        double e = Math.floor(365.25 * d);
+        double g = Math.floor((c - e) / 30.6001);
+
+        double returnValue = (g < 13.5) ? g - 1 : g - 13;
+
+        return (int) returnValue;
     }
 
     /**
-     * Calculates decimal hours from civil time.
-     * @param decimalHours <code>double</code> decimal hours.
+     * Returns the year part of a Julian Date
      */
-    public static void decimalHoursToCivilTime(double decimalHours)
+    public static int julianDateYear(double julianDate)
     {
-        PADateTime paDateTime = new PADateTime();
-        CivilTime civilTime = paDateTime.decimalHoursToCivilTime(decimalHours);
+        double i = Math.floor(julianDate + 0.5);
+        double a = Math.floor((i - 1867216.25) / 36524.25);
+        double b = (i > 2299160) ? i + 1.0 + a - Math.floor(a / 4.0) : i;
+        double c = b + 1524;
+        double d = Math.floor((c - 122.1) / 365.25);
+        double e = Math.floor(365.25 * d);
+        double g = Math.floor((c - e) / 30.6001);
+        double h = (g < 13.5) ? g - 1 : g - 13;
 
-        System.out.println(civilTime.toString());
+        double returnValue = (h > 2.5) ? d - 4716 : d - 4715;
+
+        return (int) returnValue;
+    }
+    /**
+     * Convert a Civil Time (hours,minutes,seconds) to Decimal Hours
+     */
+    public static double hmsToDH(double hours, double minutes, double seconds)
+    {
+        double fHours = hours;
+        double fMinutes = minutes;
+        double fSeconds = seconds;
+
+        double a = Math.abs(fSeconds) / 60;
+        double b = (Math.abs(fMinutes) + a) / 60;
+        double c = Math.abs(fHours) + b;
+
+        return (fHours < 0 || fMinutes < 0 || fSeconds < 0) ? -c : c;
     }
 
     /**
-     * Converts civil time to universal time.
-     * @param dateTime <code>CivilDateTime</code> date.
-     * @param zoneCorrection <code>int<code/> zone correction.
-     * @param isDaylightSavings <code>boolean<code/> daylight savings.
+     * Convert local Civil Time to Universal Time
      */
-    public static void civilTimeToUniversalTime(CivilDateTime dateTime, int zoneCorrection, boolean isDaylightSavings)
+    public DateTime localCivilTimeToUniversalTime(double lctHours, double lctMinutes, double lctSeconds,
+                                                           boolean isDaylightSavings, int zoneCorrection, double localDay, int localMonth, int localYear)
     {
-        PADateTime paDateTime = new PADateTime();
-        UniversalDateTime universalDateTime = paDateTime.localCivilTimeToUniversalTime(dateTime.hours, dateTime.minutes,
-                dateTime.seconds, isDaylightSavings, zoneCorrection, dateTime.day, dateTime.month, dateTime.year);
+        double lct = civilTimeToDecimalHours(lctHours, lctMinutes, lctSeconds);
 
-        System.out.println(universalDateTime.toString());
+        int daylightSavingsOffset = (isDaylightSavings) ? 1 : 0;
+
+        double utInterim = lct - daylightSavingsOffset - zoneCorrection;
+        double gdayInterim = localDay + (utInterim / 24);
+
+        double jd = civilDateToJulianDate(gdayInterim, localMonth, localYear);
+
+        double gDay = julianDateDay(jd);
+        int gMonth = julianDateMonth(jd);
+        int gYear = julianDateYear(jd);
+
+        double ut = 24 * (gDay - Math.floor(gDay));
+
+        return new DateTime(decimalHoursHour(ut), decimalHoursMinute(ut),
+                (int)decimalHoursSecond(ut), (int) Math.floor(gDay), gMonth, gYear);
     }
+
     /**
-     * Converts universal time to civil time.
-     * @param dateTime <code>UniversalDateTime</code> date.
-     * @param zoneCorrection <code>int<code/> zone correction.
-     * @param isDaylightSavings <code>boolean<code/> daylight savings.
+     * Convert Universal Time to local Civil Time
      */
-    public static void universalTimeToCivilTime(UniversalDateTime dateTime, int zoneCorrection,
-                                                boolean isDaylightSavings)
+    public DateTime universalTimeToLocalCivilTime(double utHours, double utMinutes, double utSeconds,
+                                                       boolean isDaylightSavings, int zoneCorrection, int gwDay, int gwMonth, int gwYear)
     {
-        PADateTime paDateTime = new PADateTime();
-        CivilDateTime civilDateTime = paDateTime.universalTimeToLocalCivilTime(dateTime.hours,dateTime.minutes,
-                dateTime.seconds,isDaylightSavings,zoneCorrection, dateTime.day, dateTime.month, dateTime.year);
+        int dstValue = (isDaylightSavings) ? 1 : 0;
+        double ut = hmsToDH(utHours, utMinutes, utSeconds);
+        double zoneTime = ut + zoneCorrection;
+        double localTime = zoneTime + dstValue;
+        double localJDPlusLocalTime = civilDateToJulianDate(gwDay, gwMonth, gwYear) + (localTime / 24);
+        double localDay = julianDateDay(localJDPlusLocalTime);
+        double integerDay = Math.floor(localDay);
+        int localMonth = julianDateMonth(localJDPlusLocalTime);
+        int localYear = julianDateYear(localJDPlusLocalTime);
 
-        System.out.println(civilDateTime.toString());
+        double lct = 24 * (localDay - integerDay);
+
+        return new DateTime(decimalHoursHour(lct), decimalHoursMinute(lct),
+                (int)decimalHoursSecond(lct), (int) integerDay, localMonth, localYear);
     }
-    public static void universalTimeToGreenwichSiderealTime(UniversalDateTime dateTime)
-    {
-        PADateTime paDateTime = new PADateTime();
-        GreenwichSiderealTime gst = paDateTime.universalTimeToGreenwichSiderealTime(dateTime.hours, dateTime.minutes,
-                                                                dateTime.seconds, dateTime.day, dateTime.month, dateTime.year);
 
-        System.out.println(gst.toString());
+    /**
+     * Convert Universal Time to Greenwich Sidereal Time
+     */
+    public Time universalTimeToGreenwichSiderealTime(double utHours, double utMinutes,
+                                                     double utSeconds, double gwDay, int gwMonth, int gwYear)
+    {
+        double jd = civilDateToJulianDate(gwDay, gwMonth, gwYear);
+        double s = jd - 2451545;
+        double t = s / 36525;
+        double t01 = 6.697374558 + (2400.051336 * t) + (0.000025862 * t * t);
+        double t02 = t01 - (24.0 * Math.floor(t01 / 24));
+        double ut = hmsToDH(utHours, utMinutes, utSeconds);
+        double a = ut * 1.002737909;
+        double gst1 = t02 + a;
+        double gst2 = gst1 - (24.0 * Math.floor(gst1 / 24));
+
+        double gstHours = decimalHoursHour(gst2);
+        double gstMinutes = decimalHoursMinute(gst2);
+        double gstSeconds = decimalHoursSecond(gst2);
+
+        return new Time(gstHours, gstMinutes, gstSeconds);
     }
-    public static void greenwichSiderealTimeToUniversalTime(GreenwichSiderealTime dateTime, CivilDate date)
-    {
-        PADateTime paDateTime = new PADateTime();
-        UniversalTime udt = paDateTime.greenwichSiderealTimeToUniversalTime(dateTime.hours, dateTime.minutes,
-                dateTime.seconds, date.day, date.month, date.year);
 
-        System.out.println(udt.toString());
+    /**
+     * Convert Greenwich Sidereal Time to Universal Time
+     */
+    public Time greenwichSiderealTimeToUniversalTime(double gstHours, double gstMinutes, double gstSeconds,
+                                                              double gwDay, int gwMonth, int gwYear) throws UTException
+    {
+        double jd = civilDateToJulianDate(gwDay, gwMonth, gwYear);
+        double s = jd - 2451545;
+        double t = s / 36525;
+        double t1 = 6.697374558 + (2400.051336 * t) + (0.000025862 * t * t);
+        double t2 = t1 - (24 * Math.floor(t1 / 24));
+        double gstHours1 = hmsToDH(gstHours, gstMinutes, gstSeconds);
+
+        double a = gstHours1 - t2;
+        double b = a - (24 * Math.floor(a / 24));
+        double ut = b * 0.9972695663;
+        double utHours = decimalHoursHour(ut);
+        double utMinutes = decimalHoursMinute(ut);
+        double utSeconds = decimalHoursSecond(ut);
+
+        if(ut < 0.065574)
+        {
+            throw new UTException();
+        }
+
+        return new Time(utHours, utMinutes, utSeconds);
     }
-    public static void greenwichSiderealTimeToLocalSiderealTime(GreenwichSiderealTime dateTime, double longitude)
-    {
-        PADateTime paDateTime = new PADateTime();
-        LocalSiderealTime lst = paDateTime.greenwichSiderealTimeToLocalSiderealTime(dateTime.hours, dateTime.minutes, dateTime.seconds, longitude);
 
-        System.out.println(lst.toString());
+    /**
+     * Convert Greenwich Sidereal Time to Local Sidereal Time
+     */
+    public Time greenwichSiderealTimeToLocalSiderealTime(double gstHours, double gstMinutes,
+                                                                      double gstSeconds, double geographicalLongitude)
+    {
+        double gst = hmsToDH(gstHours, gstMinutes, gstSeconds);
+        double offset = geographicalLongitude / 15;
+        double lstHours1 = gst + offset;
+        double lstHours2 = lstHours1 - (24 * Math.floor(lstHours1 / 24));
+
+        double lstHours = decimalHoursHour(lstHours2);
+        double lstMinutes = decimalHoursMinute(lstHours2);
+        double lstSeconds = decimalHoursSecond(lstHours2);
+
+        return new Time(lstHours, lstMinutes, lstSeconds);
     }
-    public static void localSiderealTimeToGreenwichSiderealTime(LocalSiderealTime dateTime, double longitude)
-    {
-        PADateTime paDateTime = new PADateTime();
-        GreenwichSiderealTime gst = paDateTime.localSiderealTimeToGreenwichSiderealTime(dateTime.hours, dateTime.minutes, dateTime.seconds, longitude);
 
-        System.out.println(gst.toString());
+    /**
+     * Convert Local Sidereal Time to Greenwich Sidereal Time
+     */
+    public Time localSiderealTimeToGreenwichSiderealTime(double lstHours, double lstMinutes,
+                                                                          double lstSeconds, double geographicalLongitude)
+    {
+        var gst = hmsToDH(lstHours, lstMinutes, lstSeconds);
+        var longHours = geographicalLongitude / 15;
+        var gst1 = gst - longHours;
+        var gst2 = gst1 - (24 * Math.floor(gst1 / 24));
+
+        var gstHours = decimalHoursHour(gst2);
+        var gstMinutes = decimalHoursMinute(gst2);
+        var gstSeconds = decimalHoursSecond(gst2);
+
+        return new Time(gstHours, gstMinutes, gstSeconds);
     }
 }

@@ -1,5 +1,3 @@
-import astro.practical.containers.CivilDate;
-
 public enum Planet
 {
         EARTH(12.75566E6,150,29.77286,1,
@@ -235,11 +233,11 @@ public enum Planet
 
     private int calculateDaysFromNow(CivilDate date)
     {
-        int day =  Converter.civilDateToDayNumber(date);
+        int day =  Converter.civilDateToDayNumber(date.getMonth(), date.getDay(), date.getYear());
         CivilDate currentDate = new CivilDate(1,1,2024);
-        int daysFromCurrentYear = currentDate.year;
+        int daysFromCurrentYear = currentDate.getYear();
 
-        return day - (daysFromCurrentYear - date.year) * 365;
+        return day - (daysFromCurrentYear - date.getYear()) * 365;
     }
     private double meanAnomaly(CivilDate date)
     {
@@ -283,7 +281,7 @@ public enum Planet
         return ratio;
 
     }
-    public void calculateCoordinatesOfPlanet(CivilDate date)
+    public String calculateCoordinatesOfPlanet(CivilDate date)
     {
 
         double l = heliocentricLongitude(date);
@@ -329,5 +327,8 @@ public enum Planet
 
         System.out.println("Geocentric Longitude in Degrees alfa: " + geocentricLongitude);
         System.out.println("Geocentric Latitude in Degrees betta: " + geocentricLatitude);
+
+        return geocentricLongitude + " " + geocentricLatitude;
     }
+
 }
