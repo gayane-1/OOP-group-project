@@ -281,7 +281,7 @@ public enum Planet
         return ratio;
 
     }
-    public String calculateCoordinatesOfPlanet(CivilDate date)
+    public double calculateCoordinatesOfPlanet(CivilDate date)
     {
 
         double l = heliocentricLongitude(date);
@@ -326,9 +326,18 @@ public enum Planet
                 Math.sin(longitudeNew - EARTH.heliocentricLongitude(date)));
 
         System.out.println("Geocentric Longitude in Degrees alfa: " + geocentricLongitude);
-        System.out.println("Geocentric Latitude in Degrees betta: " + geocentricLatitude);
 
-        return geocentricLongitude + " " + geocentricLatitude;
+        return geocentricLongitude;
     }
+    public double distanceOfThePlanetFromEarth(CivilDate date)
+    {
+        double earthRatio = EARTH.ratioToEarthsOrbit(date);
+        double planetRatio = ratioToEarthsOrbit(date);
+        double distanceAU = Math.sqrt(earthRatio * earthRatio + planetRatio * planetRatio -
+                2 * earthRatio * planetRatio * Math.cos(heliocentricLongitude(date) - EARTH.heliocentricLongitude(date)));
 
+        double angularDiameter = angularDiameterAtOneAU / distanceAU;
+
+        return angularDiameter;
+    }
 }
