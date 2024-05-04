@@ -1,3 +1,5 @@
+package measures;
+
 public class Angle
 {
     private double hours;

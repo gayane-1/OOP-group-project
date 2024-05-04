@@ -1,7 +1,11 @@
+package core;
+
+import measures.*;
+
 public class Converter
 {
     /**
-     * Convert an Angle (degrees, minutes, and seconds) to Decimal Degrees
+     * Convert an measures.Angle (degrees, minutes, and seconds) to Decimal Degrees
      */
     public static double angleToDecimalDegrees(double degrees, double minutes, double seconds)
     {
@@ -64,7 +68,7 @@ public class Converter
     /**
      * Gets the date of Easter for the year specified.
      */
-    public static CivilDate getDateOfEaster(int inputYear)
+    public static CivilDate getDateOfEaster(int inputYear) throws IllegalDateException
     {
         double year = inputYear;
 
@@ -91,27 +95,35 @@ public class Converter
     /**
      * Calculate day number for a date.
      */
-    public static int civilDateToDayNumber(int month, int day, int year)
+    public static int civilDateToDayNumber(CivilDate date) throws IllegalDateException
     {
-        if (month <= 2) {
+        int month  = date.getMonth();
+        int year  = date.getYear();
+        int day  = date.getDay();
+
+        if (date.getMonth() <= 2)
+        {
             month = month - 1;
             month = isLeapYear(year) ? month * 62 : month * 63;
             month = (int) Math.floor((double) month / 2);
-        } else {
+        } else
+        {
             month = (int) Math.floor(((double) month + 1) * 30.6);
             month = (isLeapYear(year)) ? month - 62 : month - 63;
         }
 
         return month + day;
     }
+
     /**
      * Determine if year is a leap year.
      */
-    public static boolean isLeapYear(int inputYear)
+    public static boolean isLeapYear(int inputYear) throws IllegalDateException
     {
         double year = inputYear;
 
-        if (year % 4 == 0) {
+        if (year % 4 == 0)
+        {
             if (year % 100 == 0)
                 return (year % 400 == 0);
             else
@@ -121,7 +133,7 @@ public class Converter
     }
 
     /**
-     * Convert Civil Time (hours,minutes,seconds) to Decimal Hours
+     * Convert Civil measures.Time (hours,minutes,seconds) to Decimal Hours
      */
     public static double civilTimeToDecimalHours(double hours, double minutes, double seconds)
     {
@@ -136,7 +148,7 @@ public class Converter
         return (fHours < 0 || fMinutes < 0 || fSeconds < 0) ? -c : c;
     }
     /**
-     * Convert Decimal Hours to Civil Time (hours,minutes,seconds)
+     * Convert Decimal Hours to Civil measures.Time (hours,minutes,seconds)
      */
     public static Time decimalHoursToCivilTime(double decimalHours)
     {
@@ -150,26 +162,31 @@ public class Converter
     /**
      * Convert a Greenwich Date/Civil Date (day,month,year) to Julian Date
      */
-    public static double civilDateToJulianDate(double day, double month, double year)
+    public static double civilDateToJulianDate(CivilDate date) throws IllegalDateException
     {
-        double fDay = (double) day;
-        double fMonth = (double) month;
-        double fYear = (double) year;
+        double fDay =  date.getDay();
+        double fMonth = date.getMonth();
+        double fYear =  date.getYear();
 
         double y = (fMonth < 3) ? fYear - 1 : fYear;
         double m = (fMonth < 3) ? fMonth + 12 : fMonth;
 
         double b;
 
-        if (fYear > 1582) {
+        if (fYear > 1582)
+        {
             double a = Math.floor(y / 100);
             b = 2 - a + Math.floor(a / 4);
-        } else {
-            if (fYear == 1582 && fMonth > 10) {
+        } else
+        {
+            if (fYear == 1582 && fMonth > 10)
+            {
                 double a = Math.floor(y / 100);
                 b = 2 - a + Math.floor(a / 4);
-            } else {
-                if (fYear == 1582 && fMonth == 10 && fDay >= 15) {
+            } else
+            {
+                if (fYear == 1582 && fMonth == 10 && fDay >= 15)
+                {
                     double a = Math.floor(y / 100);
                     b = 2 - a + Math.floor(a / 4);
                 } else
@@ -235,7 +252,7 @@ public class Converter
         return (int) returnValue;
     }
     /**
-     * Convert a Civil Time (hours,minutes,seconds) to Decimal Hours
+     * Convert a Civil measures.Time (hours,minutes,seconds) to Decimal Hours
      */
     public static double hmsToDH(double hours, double minutes, double seconds)
     {
@@ -251,10 +268,10 @@ public class Converter
     }
 
     /**
-     * Convert local Civil Time to Universal Time
+     * Convert local Civil measures.Time to Universal measures.Time
      */
-    public DateTime localCivilTimeToUniversalTime(double lctHours, double lctMinutes, double lctSeconds,
-                                                           boolean isDaylightSavings, int zoneCorrection, double localDay, int localMonth, int localYear)
+    public static DateTime localCivilTimeToUniversalTime(double lctHours, double lctMinutes, double lctSeconds,
+                                                  boolean isDaylightSavings, int zoneCorrection, double localDay, int localMonth, int localYear) throws IllegalDateException
     {
         double lct = civilTimeToDecimalHours(lctHours, lctMinutes, lctSeconds);
 
@@ -263,7 +280,7 @@ public class Converter
         double utInterim = lct - daylightSavingsOffset - zoneCorrection;
         double gdayInterim = localDay + (utInterim / 24);
 
-        double jd = civilDateToJulianDate(gdayInterim, localMonth, localYear);
+        double jd = civilDateToJulianDate(new CivilDate((int)gdayInterim, localMonth, localYear));
 
         double gDay = julianDateDay(jd);
         int gMonth = julianDateMonth(jd);
@@ -271,21 +288,22 @@ public class Converter
 
         double ut = 24 * (gDay - Math.floor(gDay));
 
-        return new DateTime(decimalHoursHour(ut), decimalHoursMinute(ut),
-                (int)decimalHoursSecond(ut), (int) Math.floor(gDay), gMonth, gYear);
+        return new DateTime((int) Math.floor(gDay), gMonth, gYear, decimalHoursHour(ut), decimalHoursMinute(ut),
+                (int)decimalHoursSecond(ut));
     }
 
     /**
-     * Convert Universal Time to local Civil Time
+     * Convert Universal measures.Time to local Civil measures.Time
      */
-    public DateTime universalTimeToLocalCivilTime(double utHours, double utMinutes, double utSeconds,
+    public static DateTime universalTimeToLocalCivilTime(double utHours, double utMinutes, double utSeconds,
                                                        boolean isDaylightSavings, int zoneCorrection, int gwDay, int gwMonth, int gwYear)
+                                                    throws IllegalDateException
     {
         int dstValue = (isDaylightSavings) ? 1 : 0;
         double ut = hmsToDH(utHours, utMinutes, utSeconds);
         double zoneTime = ut + zoneCorrection;
         double localTime = zoneTime + dstValue;
-        double localJDPlusLocalTime = civilDateToJulianDate(gwDay, gwMonth, gwYear) + (localTime / 24);
+        double localJDPlusLocalTime = civilDateToJulianDate(new CivilDate(gwDay, gwMonth, gwYear)) + (localTime / 24);
         double localDay = julianDateDay(localJDPlusLocalTime);
         double integerDay = Math.floor(localDay);
         int localMonth = julianDateMonth(localJDPlusLocalTime);
@@ -298,12 +316,12 @@ public class Converter
     }
 
     /**
-     * Convert Universal Time to Greenwich Sidereal Time
+     * Convert Universal measures.Time to Greenwich Sidereal measures.Time
      */
-    public Time universalTimeToGreenwichSiderealTime(double utHours, double utMinutes,
-                                                     double utSeconds, double gwDay, int gwMonth, int gwYear)
+    public static Time universalTimeToGreenwichSiderealTime(double utHours, double utMinutes,
+                                                     double utSeconds, double gwDay, int gwMonth, int gwYear) throws IllegalDateException
     {
-        double jd = civilDateToJulianDate(gwDay, gwMonth, gwYear);
+        double jd = civilDateToJulianDate(new CivilDate((int)gwDay, gwMonth, gwYear));
         double s = jd - 2451545;
         double t = s / 36525;
         double t01 = 6.697374558 + (2400.051336 * t) + (0.000025862 * t * t);
@@ -321,12 +339,12 @@ public class Converter
     }
 
     /**
-     * Convert Greenwich Sidereal Time to Universal Time
+     * Convert Greenwich Sidereal measures.Time to Universal measures.Time
      */
-    public Time greenwichSiderealTimeToUniversalTime(double gstHours, double gstMinutes, double gstSeconds,
-                                                              double gwDay, int gwMonth, int gwYear) throws UTException
+    public static Time greenwichSiderealTimeToUniversalTime(double gstHours, double gstMinutes, double gstSeconds,
+                                                              double gwDay, int gwMonth, int gwYear) throws IllegalDateException
     {
-        double jd = civilDateToJulianDate(gwDay, gwMonth, gwYear);
+        double jd = civilDateToJulianDate(new CivilDate((int)gwDay, gwMonth, gwYear));
         double s = jd - 2451545;
         double t = s / 36525;
         double t1 = 6.697374558 + (2400.051336 * t) + (0.000025862 * t * t);
@@ -342,16 +360,16 @@ public class Converter
 
         if(ut < 0.065574)
         {
-            throw new UTException();
+            throw new IllegalDateException();
         }
 
         return new Time(utHours, utMinutes, utSeconds);
     }
 
     /**
-     * Convert Greenwich Sidereal Time to Local Sidereal Time
+     * Convert Greenwich Sidereal measures.Time to Local Sidereal measures.Time
      */
-    public Time greenwichSiderealTimeToLocalSiderealTime(double gstHours, double gstMinutes,
+    public static Time greenwichSiderealTimeToLocalSiderealTime(double gstHours, double gstMinutes,
                                                                       double gstSeconds, double geographicalLongitude)
     {
         double gst = hmsToDH(gstHours, gstMinutes, gstSeconds);
@@ -367,9 +385,9 @@ public class Converter
     }
 
     /**
-     * Convert Local Sidereal Time to Greenwich Sidereal Time
+     * Convert Local Sidereal measures.Time to Greenwich Sidereal measures.Time
      */
-    public Time localSiderealTimeToGreenwichSiderealTime(double lstHours, double lstMinutes,
+    public static Time localSiderealTimeToGreenwichSiderealTime(double lstHours, double lstMinutes,
                                                                           double lstSeconds, double geographicalLongitude)
     {
         var gst = hmsToDH(lstHours, lstMinutes, lstSeconds);

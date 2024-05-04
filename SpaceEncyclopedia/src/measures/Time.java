@@ -1,3 +1,5 @@
+package measures;
+
 public class Time
 {
     private double hours;

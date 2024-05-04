@@ -1,14 +1,37 @@
+import core.Converter;
+import measures.CivilDate;
+import measures.IllegalDateException;
+import ui.FirstWindow;
+
 public class Main
 {
 
     public static void main(String[] args)
     {
-        Planet earth = Planet.EARTH;
+      /*  Planet earth = Planet.EARTH;
         Planet mars = Planet.MARS;
         Planet mercury = Planet.MERCURY;
         Planet jupiter = Planet.JUPITER;
+        Scanner sc = new Scanner(System.in);
 
-        System.out.println(earth.calculateCoordinatesOfPlanet(new CivilDate(22,11,1988)));
-        System.out.println(jupiter.distanceOfThePlanetFromEarth(new CivilDate(22,11,1988)));
+        boolean input = true;
+
+        while (input)
+        {
+            System.out.println("Please input the date");
+            int day = sc.nextInt();
+            int month = sc.nextInt();
+            int year = sc.nextInt();
+            try
+            {
+                earth.calculateCoordinatesOfPlanet(new CivilDate(day, month, year));
+                input = false;
+            }catch (IllegalDateException e)
+            {
+                System.out.println("Illegal date, please try again");
+            }
+        }*/
+
+            FirstWindow gui = new FirstWindow();
     }
 }
