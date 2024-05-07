@@ -9,13 +9,17 @@ public class FirstWindow extends JFrame implements ActionListener
 {
     private PlanetsWindow planetWindow;
     private ConverterWindow converterWindow;
-    private JButton planetButton, converterButton;
+    private SunWindow sunWindow;
+    private StarWindow starWindow;
+    private JButton planetButton, converterButton, sunButton, starButton;
     private JPanel mainButtonPanel;
     private JLabel textLabel;
     private ImageIcon titleImage = new ImageIcon("src/gfx/TitleImage.jpg");
     private ImageIcon planetButtonImage = new ImageIcon("src/gfx/Planet.jpg");
-    private ImageIcon converterButtonImage = new ImageIcon("src/gfx/Calculator.png");
-    private static final int MAIN_WIDTH = 1400;
+    private ImageIcon converterButtonImage = new ImageIcon("src/gfx/Converter.jpg");
+    private ImageIcon starButtonImage = new ImageIcon("src/gfx/Star.jpg");
+    private ImageIcon sunButtonImage = new ImageIcon("src/gfx/Sun.jpg");
+    private static final int MAIN_WIDTH = 1500;
     private static final int MAIN_HEIGHT = 1000;
     private static final int FONT_SIZE = 30;
 
@@ -41,18 +45,28 @@ public class FirstWindow extends JFrame implements ActionListener
         mainButtonPanel = new JPanel();
         planetButton = new JButton();
         converterButton = new JButton();
+        sunButton = new JButton();
+        starButton = new JButton();
+
         planetButton.setBorder(BorderFactory.createEmptyBorder(-1,-1,-1,-1));
         planetButton.setIcon(planetButtonImage);
+        starButton.setBorder(BorderFactory.createEmptyBorder(-1,-1,-1,-1));
+        starButton.setIcon(starButtonImage);
+        sunButton.setBorder(BorderFactory.createEmptyBorder(-1,-1,-1,-1));
+        sunButton.setIcon(sunButtonImage);
         converterButton.setBorder(BorderFactory.createEmptyBorder(-1,-1,-1,-1));
-        converterButton.setBackground(new Color(3, 6, 55));
         converterButton.setIcon(converterButtonImage);
 
         mainButtonPanel.setBackground(new Color(3, 6, 55));
         mainButtonPanel.setLayout(new BoxLayout(mainButtonPanel, BoxLayout.X_AXIS));
         mainButtonPanel.setBorder(BorderFactory.createEmptyBorder(-300, 20, 50, 50));
         mainButtonPanel.add(planetButton);
-        mainButtonPanel.add(Box.createRigidArea(new Dimension(100,0)));
+        mainButtonPanel.add(Box.createRigidArea(new Dimension(50,0)));
         mainButtonPanel.add(converterButton);
+        mainButtonPanel.add(Box.createRigidArea(new Dimension(50,0)));
+        mainButtonPanel.add(sunButton);
+        mainButtonPanel.add(Box.createRigidArea(new Dimension(50,0)));
+        mainButtonPanel.add(starButton);
 
         add(mainButtonPanel);
 
@@ -60,6 +74,8 @@ public class FirstWindow extends JFrame implements ActionListener
 
         planetButton.addActionListener(this);
         converterButton.addActionListener(this);
+        starButton.addActionListener(this);
+        sunButton.addActionListener(this);
     }
     @Override
     public void actionPerformed(ActionEvent e)
@@ -72,6 +88,16 @@ public class FirstWindow extends JFrame implements ActionListener
         if(e.getSource() == converterButton)
         {
             converterWindow = new ConverterWindow();
+            dispose();
+        }
+        if(e.getSource() == sunButton)
+        {
+            sunWindow = new SunWindow();
+            dispose();
+        }
+        if(e.getSource() == starButton)
+        {
+            starWindow = new StarWindow();
             dispose();
         }
     }

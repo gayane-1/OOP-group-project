@@ -12,7 +12,7 @@ import java.awt.event.ActionListener;
 public class ConverterWindow extends JFrame implements ActionListener
 {
     private static final int HEIGHT = 1000;
-    private static final int WIDTH = 1400;
+    private static final int WIDTH = 1500;
     private static final int MENU_BAR_HEIGHT = 50;
     private static final int MENU_BAR_WIDTH = 50;
     private static final int MENU_ITEM_HEIGHT = 30;
@@ -149,7 +149,6 @@ public class ConverterWindow extends JFrame implements ActionListener
         outputLabel.setHorizontalAlignment(SwingConstants.CENTER);
         outputLabel.setVerticalAlignment(SwingConstants.TOP);
         outputLabel.setLayout(new BorderLayout());
-        //outputLabel.setBorder(BorderFactory.createLineBorder(Color.BLACK));
         outputLabel.add(outputTextField, BorderLayout.SOUTH);
 
 

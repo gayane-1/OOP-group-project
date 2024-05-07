@@ -1,4 +1,6 @@
 import core.Converter;
+import core.Star;
+import core.Sun;
 import measures.CivilDate;
 import measures.IllegalDateException;
 import ui.FirstWindow;
@@ -31,7 +33,6 @@ public class Main
                 System.out.println("Illegal date, please try again");
             }
         }*/
-
-            FirstWindow gui = new FirstWindow();
+        FirstWindow gui = new FirstWindow();
     }
 }

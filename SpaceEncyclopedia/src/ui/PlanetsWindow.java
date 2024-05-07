@@ -11,7 +11,7 @@ import measures.IllegalDateException;
 public class PlanetsWindow extends JFrame implements ActionListener
 {
     private static final int HEIGHT = 1000;
-    private static final int WIDTH = 1400;
+    private static final int WIDTH = 1500;
     private static final int MENUBAR_WIDTH = 100;
     private static final int MENUBAR_HEIGHT = 100;
     private static final int TEXT_AREA_FONT_SIZE = 13;

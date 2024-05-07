@@ -16,6 +16,18 @@ public class Converter
 
         return d;
     }
+    public static double degToRad(double d)
+    {
+        d %= 360.0;
+        if (d < 0.0)
+            d += 360.0;
+        return (d / 360.0) * (2.0 * Math.PI);
+    }
+    static double radToDeg(double d)
+    {
+        double e = (d / (2.0 * Math.PI)) * 360.0;
+        return rev(e);
+    }
     public static Angle decimalDegreesToAngle(double decimalDegrees)
     {
         double unsignedDecimal = Math.abs(decimalDegrees);
@@ -400,5 +412,36 @@ public class Converter
         var gstSeconds = decimalHoursSecond(gst2);
 
         return new Time(gstHours, gstMinutes, gstSeconds);
+    }
+    public static double sin(double x) {
+        return Math.sin(degToRad(x));
+    }
+
+    public static double cos(double x) {
+        return Math.cos(degToRad(x));
+    }
+
+    public static double acos(double x) {
+        return radToDeg(Math.acos(x));
+    }
+
+    public static double atan2(double a, double b) {
+        return radToDeg(Math.atan2(a, b));
+    }
+
+    public static double asin(double x) {
+        return radToDeg(Math.asin(x));
+    }
+
+    public static double sqrt(double x) {
+        return Math.sqrt(x);
+    }
+
+    public static double abs(double x) {
+        return Math.abs(x);
+    }
+
+    public static double rev(double x) {
+        return x - Math.floor(x / 360.0) * 360.0;
     }
 }

@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="SpaceEncyclopedia:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/SpaceEncyclopedia_jar</output-path>
+    <root id="archive" name="SpaceEncyclopedia.jar">
+      <element id="module-output" name="SpaceEncyclopedia" />
+    </root>
+  </artifact>
+</component>
